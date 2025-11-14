@@ -23,6 +23,9 @@ public class Main {
         arbol.enOrden();
         System.out.println("Arbol en PostOrden: ");
         arbol.postOrden();
+
+        System.out.println("El arbol esta lleno? "+ arbol.estaLleno());
+
     }
 }
 
@@ -61,9 +64,9 @@ class Node<E> {
         this.right = right;
     }
 
-    public boolean isLeaf(Node<E> node){
-        if(node.getLeft() == null && node.getRight()==null) {return true;}
-        else return false;
+    public boolean isLeaf(){
+        if(this.getLeft() == null && this.getRight()==null){return true;}
+        else {return false;}
     }
 }
 
@@ -72,6 +75,7 @@ class ArbolBinario<E> {
     private Queue<E> preOrden = new LinkedList<>();
     private Queue<E> enOrden = new LinkedList<>();
     private Queue<E> postOrden = new LinkedList<>();
+    private Queue<E> llenoPrueba = new LinkedList<>();
 
 
     public ArbolBinario() {
@@ -137,12 +141,28 @@ class ArbolBinario<E> {
         postOrden.add(nodoActual.getData());
     }
 
-    public void estaLleno(){
-        estaLlenoRecursivo(this.root);
+    public boolean estaLleno(){
+        return estaLlenoRecursivo(this.root) >= 0;
     }
 
-    public boolean estaLlenoRecursivo(Node<E> nodoActual) {
-        if(nodoActual==null){return true;}
+    public int estaLlenoRecursivo(Node<E> nodoActual) {
+        if (nodoActual == null) {
+            return 0;
+        }
+
+        int alturaIzquierda = estaLlenoRecursivo(nodoActual.getLeft());
+        int alturaDerecha = estaLlenoRecursivo(nodoActual.getRight());
+
+        if (alturaIzquierda == -1 || alturaDerecha == -1) {
+            return -1;
+        }
+        if (alturaIzquierda == alturaDerecha) {
+
+            return alturaIzquierda + 1;
+        } else {
+            return -1;
+        }
     }
 }
+
 
